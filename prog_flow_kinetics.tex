@@ -92,9 +92,10 @@ is constant, as it does not depend on the temperature. \Antioch\ supports at thi
 moment only photochemical reaction, but what will be describe here holds for any
 particle flux-induced reaction.
 
-The only change so is that instead of passing down a temperature, \KineticsEvaluator,
-\ReactionSet\ and \Reaction\ need to pass down a particle flux (\ParticleFlux). The
-big difference is the type of the data. A temperature is an atomic type (typically
+The only change so is that instead of passing down a temperature,
+we need to pass down a particle flux (\ParticleFlux) along the path
+\KineticsEvaluator, \ReactionSet\ and \Reaction.
+The big difference is the type of the data. A temperature is an atomic type (typically
 a \prog{double} or a \prog{float}, while the \ParticleFlux\ is a \ParticleFlux, and
 contains a vector type (the full description is \ParticleFlux\prog{<VectorCoeffType>}),
 as is needs to store a flux intensity and a grid (wavelength, energy, \dots) corresponding
@@ -143,13 +144,13 @@ with
 \end{verbatim}
 and so forth down to \KineticsType.
 
-Method \ref{meta_paradise} would require a little bit more perversion, but no
-overloading. Basically the idea would be to have the definition
+Method \ref{meta_paradise} would require a little bit more perversion, but not
+too much overloading. Basically the idea would be to have the definition
 \begin{verbatim}
   template<typename CoeffType, typename VectorCoeffType>
   template <typename DataType, typename VectorStateType, typename StateType>
   inline
-  typedef typename Antioch::returned_type<DataType>::type
+  typedef typename Antioch::atomic_type<DataType>::type
         Reaction<CoeffType,VectorCoeffType>::compute_rate_of_progress( 
                 const VectorStateType& molar_densities,
                 const DataType& T,  
@@ -159,12 +160,12 @@ overloading. Basically the idea would be to have the definition
 with the meta function
 \begin{verbatim}
   template <typename T, typename Enable=void>
-  struct returned_type;
+  struct atomic_type;
 \end{verbatim}
 that would be defined as
 \begin{verbatim}
 template <typename T>
-struct returned_type<T>
+struct atomic_type<T>
 {
   typedef T type;
 };
@@ -173,9 +174,64 @@ for all there is (eigen, metaphysicl, valarray, vector, vexcl, ANTIOCH\_PLAIN\_S
 as
 \begin{verbatim}
 template <typename T>
-struct returned_type<ParticleFlux<T> >
+struct atomic_type<ParticleFlux<T> >
 {
   typedef typename Antioch::value_type<T>::type type;
 };
 \end{verbatim}
 for the particle flux.
+
+We have templates for the data, basically temperature, molar
+densities, thermodynamics and particle flux. In all these, temperature
+and particle flux are equivalent because they are directly associated
+to the calculations of the forward rate constant at the lowest level. 
+Thus, at the \KineticsType\ level, we have basically the method:
+\begin{verbatim}
+template <typename StateType>
+StateType rate(const StateType &T);
+\end{verbatim}
+We generalize it by:
+\begin{verbatim}
+template <typename StateType, typename DataType>
+StateType rate(const DataType &T);
+\end{verbatim}
+The \prog{DataType} being either a temperature or a particle flux (or anything we
+cannot think of right now). So what to do?
+
+The idea is to define an \prog{atomic\_type}, which is the type of the temperature.
+The data cannot be simpler than that. So we have data in a type that is either
+atomic or composed. A particle flux is basically two vectors of atomic data, thus:
+\begin{verbatim}
+template <typename DataType>
+typename atomic_type<DataType>::type rate(const DataType &T);
+\end{verbatim}
+Another thing pops out. In the calculations, we can use either the data in its atomic
+or composed form. Thus a kinetics model should use only the type it needs:
+\begin{verbatim}
+template <typename DataType>
+typename atomic_type<DataType>::type 
+        rate(const typename atomic_type<DataType>::type &
+                            atomic_value<DataType>(T));
+\end{verbatim}
+for a temperature, and 
+\begin{verbatim}
+template <typename DataType>
+typename atomic_type<DataType>::type 
+        rate(const typename particle_flux_type<DataType>::type &
+                            particle_value<DataType>(T));
+\end{verbatim}
+for a particle flux.
+
+Thus a new composed data requires:
+\begin{itemize}
+\item a meta-macro \verb!atomic_type!  to gain the atomic type from it;
+\item a meta-macro \verb!atomic_value! to gain the atomic value from it;
+\item a meta-macro \verb!new_data_type! to gain the composed data type;
+\item a meta-macro \verb!new_data_value! to gain the composed data value.
+\end{itemize}
+Some more are needed:
+\begin{itemize}
+\item \verb!zero_clone! to atomic type;
+\item \verb!constant_clone! to atomic type.
+\end{itemize}
+other clones are not needed.
