@@ -1,10 +1,80 @@
-The main objects, the ones you user should use, should be the
-\prog{KineticsEvaluator} and the \prog{ReactionSet}.
-
-In Fig.~\ref{kinpf} are the relationships.
+Figure~\ref{kinpf} describe the data flow from the upper
+object \KineticsEvaluator\ to the rate constants objects.
+The idea here is to have a light high-level object that will
+be fast to build, so easily threadable. All the necessary data
+and the bulk of the work is in lower-level objects.
+%
 \begin{figure}
 \centering
 \includegraphics{kinetics_relationships}
-\caption{\label{kinpf}Global vision of who's creating and filling
-who, where to define stuff.}
+\caption{\label{kinpf}Global vision of the kinetics in \Antioch.
+The gray area frames objects that should not be threaded, whereas
+\KineticsEvaluator\ is light and thread-safe. The passed values of
+interest are the temperature \prog{const StateType \& T}, the
+particle flux \prog{const ParticleFlux<VectorCoeffType> \& pf} and
+the composition \prog{const VectorStateType \& dens}.}
 \end{figure}
+%
+\subsection{A classical case}
+
+Let's consider a simple bimolecular reaction, elementary,
+with a Kooij kinetics model. The informations we need for
+a complete kinetics calculation are the temperature, the
+composition and the thermodynamics. The thermodynamics are
+calculated in another place of the program, what \Antioch\
+will provide will be the Gibbs energy for all the concerned
+species (see section~\ref{kinetics_gen}, \textbf{Going backward}
+subsection). So at the \KineticsEvaluator\ level, we need
+to provide \Antioch's guts with:
+\begin{itemize}
+\item a \prog{const StateType \& T} for the temperature,
+\item a \prog{const VectorStateType \& molar\_densities} for
+                the densities,
+\item a \prog{const VectorStateType \& h\_RT\_minus\_s\_R} for
+                the thermodynamics.
+\end{itemize}
+
+The goal is to have the quantity \doverdt{S} for all species \ce{S} concerned by the 
+reactive system (see \ref{phys:kinetics_theory_integrated}).
+
+\subsubsection{Data flow}
+
+\paragraph{\KineticsEvaluator}
+will gain from \ReactionSet\ the net rates of
+the reactions,  i.e. the term \rate[r] in \ref{phys:kinetics_theory_integrated}.
+Thus \KineticsEvaluator\ will, for every species, perform the loop
+over the concerned reactions and multiply by the stoichiometric coefficient.
+Technically, \KineticsEvaluator\ gives \ReactionSet\ a \prog{VectorCoeffType}
+to fill with these terms.
+
+\paragraph{\ReactionSet}
+will equate the values of the provided \prog{VectorCoeffType} with
+the returning value given by the \Reaction. To do that, it passes down to
+the \Reaction\ object the temperature, the composition, the thermodynamics and
+the value $\frac{\pz}{\Rg \Temp}$, used for the equilibrium constant calculation,
+needed for the backward rate constant \eqref{therm:K_therm}.
+
+\paragraph{\Reaction} will asks the \KineticsType\ object (its rate constants) to calculate
+the forward rate constant of the reaction (term \fwdratecons[r]) by passing
+it the temperature. Then it will be able 
+to calculate the backward rate constant (term \bkwdratecons[r]), 
+the forward (term \fwdrate[r]) and backward rate (term \bkwdrate[r]), 
+and finally the net rate (term \rate[r]).
+
+\paragraph{\KineticsType} will return the forward rate constant \fwdratecons[r] given
+the temperature.
+
+\subsubsection{Template flow}
+
+\paragraph{\KineticsEvaluator} asks for a \prog{VectorCoeffType} to be filled. It
+provides a \prog{StateType} for the temperature and a \prog{VectorStateType} for
+the densities.
+
+\paragraph{\ReactionSet} fills each value of the \prog{VectorCoeffType} with
+the returning type of \Reaction.
+
+\paragraph{\Reaction} returns a \prog{StateType}, which is the defined type of the
+provided temperature.
+
+\paragraph{\KineticsType} returns a \prog{StateType}, defined by the type of the
+provided temperature.
