@@ -78,3 +78,104 @@ provided temperature.
 
 \paragraph{\KineticsType} returns a \prog{StateType}, defined by the type of the
 provided temperature.
+
+\subsection{A particle flux reaction}
+
+A reaction occuring with a particle flux is another type of reaction than the one
+previously considered. Basically, instead of having molecules bumping into each
+other and joyfully transforming into other molecules, this kind of reaction is
+a molecule shot by particles, and transforming into another molecule(s). A simple
+example is photoinduced ionization, a photon will hit a molecule, be absorbed, and
+the excedental energy will pop out an electron, thus describing the reaction
+\ce{A ->[\mathrm{h}\nu] A+}. In the classical view, this means that the rate constant
+is constant, as it does not depend on the temperature. \Antioch\ supports at this
+moment only photochemical reaction, but what will be describe here holds for any
+particle flux-induced reaction.
+
+The only change so is that instead of passing down a temperature, \KineticsEvaluator,
+\ReactionSet\ and \Reaction\ need to pass down a particle flux (\ParticleFlux). The
+big difference is the type of the data. A temperature is an atomic type (typically
+a \prog{double} or a \prog{float}, while the \ParticleFlux\ is a \ParticleFlux, and
+contains a vector type (the full description is \ParticleFlux\prog{<VectorCoeffType>}),
+as is needs to store a flux intensity and a grid (wavelength, energy, \dots) corresponding
+to those intensity. A photon flux will be characterized by an intensity per wavelength.
+
+Thus the program flow stays the same, just replace the temperature with the particle
+flux. Where it gets tricky is at the \Reaction\ level, where it returns the net reaction
+rate value. Two things to consider here: a reaction occuring through particle flux
+chemistry is irreversible in nature, so no backward rate consideration (nor thermodynamics),
+we need to extract a \prog{StateType} out of a \ParticleFlux\prog{<VectorCoeffType>}.
+The concerned method is (templates left out)
+\begin{center}
+\verb!StateType Reaction::compute_rate_of_progress() const!
+\end{center}
+with \prog{StateType} provided by the passed temperature. In this case however, we but
+need the molecular densities (\prog{VectorStateType}) and the \ParticleFlux. So the
+question is, how do we get the \prog{StateType} type?
+
+Several possibilities here:
+\begin{enumerate}
+\item\label{type_pass} we pass down the temperature anyway, just for the type;
+\item\label{meta_paradise} heck man, meta computing is so great, let's just refactore those method!
+\end{enumerate}
+
+The method \ref{type_pass} is simple, we would need to overload the methods:
+\begin{verbatim}
+  template<typename CoeffType, typename VectorCoeffType>
+  template <typename StateType, typename VectorStateType>
+  inline
+  StateType Reaction<CoeffType,VectorCoeffType>::compute_rate_of_progress( 
+                const VectorStateType& molar_densities,
+                const StateType& T,  
+                const StateType& P0_RT,  
+                const VectorStateType& h_RT_minus_s_R) const;
+\end{verbatim}
+with
+\begin{verbatim}
+  template<typename CoeffType, typename VectorCoeffType>
+  template <typename StateType, typename VectorStateType>
+  inline
+  StateType Reaction<CoeffType,VectorCoeffType>::compute_rate_of_progress( 
+                const VectorStateType& molar_densities,
+                const ParticleFlux<VectorStateType>& pf,
+                const StateType & /*T*/) const;
+                
+\end{verbatim}
+and so forth down to \KineticsType.
+
+Method \ref{meta_paradise} would require a little bit more perversion, but no
+overloading. Basically the idea would be to have the definition
+\begin{verbatim}
+  template<typename CoeffType, typename VectorCoeffType>
+  template <typename DataType, typename VectorStateType, typename StateType>
+  inline
+  typedef typename Antioch::returned_type<DataType>::type
+        Reaction<CoeffType,VectorCoeffType>::compute_rate_of_progress( 
+                const VectorStateType& molar_densities,
+                const DataType& T,  
+                const StateType& P0_RT,  
+                const VectorStateType& h_RT_minus_s_R) const;
+\end{verbatim}
+with the meta function
+\begin{verbatim}
+  template <typename T, typename Enable=void>
+  struct returned_type;
+\end{verbatim}
+that would be defined as
+\begin{verbatim}
+template <typename T>
+struct returned_type<T>
+{
+  typedef T type;
+};
+\end{verbatim}
+for all there is (eigen, metaphysicl, valarray, vector, vexcl, ANTIOCH\_PLAIN\_SCALAR), and
+as
+\begin{verbatim}
+template <typename T>
+struct returned_type<ParticleFlux<T> >
+{
+  typedef typename Antioch::value_type<T>::type type;
+};
+\end{verbatim}
+for the particle flux.
