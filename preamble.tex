@@ -1,5 +1,7 @@
-%first thing first
+%first things first
 \graphicspath{{./figs/}}
+\makeindex
+%%%%
 %%%% meta-meta-function
 \newcommand{\make@}[3][upshape]{%
 \expandafter\gdef\csname font@#2\endcsname##1{% create font@something macro
@@ -47,7 +49,7 @@
 \newcounter{vmajor}
 \newcounter{vmedium}
 \newcounter{vminor}
-\newcommand{\theversion}{\thevmajor.\thevmedium.\thevminor}
+\newcommand{\theversion}{\font@library{\thevmajor.\thevmedium.\thevminor}}
 %% fun
 \newcommand{\ANTIOCH}{\font@library{A}
                       \font@library{N}ew

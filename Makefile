@@ -28,6 +28,7 @@ clsfiles := $(wildcard *.cls ../common/*.cls)
 alldeps := *.tex $(bibfiles) $(figures) $(figsources) $(clsfiles) $(styfiles)
 
 BIBTEX     ?= bibtex
+MAKEINDEX  ?= makeindex
 PDFLATEX   ?= pdflatex
 LATEX      ?= latex
 PYTHON     ?= python
@@ -57,8 +58,9 @@ continuous: all
         done
 
 $(texfinal): $(alldeps)
-	if ls *.bib 2>&1; then $(MYPDFLATEX) -draftmode $(call texroot,$@); fi
+	if (ls *.bib 2>&1 || grep \printindex $(call texroot,$@).tex 2>&1); then $(MYPDFLATEX) -draftmode $(call texroot,$@); fi
 	if (ls *.bib 2>&1 && ls $(call texroot,$@).aux 2>&1); then $(BIBTEX) $(call texroot,$@); fi
+	if (ls *.idx 2>&1 && ls $(call texroot,$@).aux 2>&1); then $(MAKEINDEX) $(call texroot,$@); fi
 	$(MYPDFLATEX) -draftmode $(call texroot,$@) && $(MYPDFLATEX) -draftmode $(call texroot,$@) && $(MYPDFLATEX) $(call texroot,$@)
 	if [ "$@" != "$(call texroot,$@).pdf" ]; then mv "$(call texroot,$@).pdf" "$@"; fi
 
@@ -66,7 +68,7 @@ clean: cleanlatex cleanfigs
 
 cleanlatex:
 	rm -f $(patsubst %.tex, %.aux, $(wildcard *.tex))
-	rm -f $(foreach ext,.bbl .blg .log .dvi .nav .nlo .out .pdf .snm .spl .toc .vrb Notes.bib,$(patsubst %.tex,%$(ext),$(texsource)))
+	rm -f $(foreach ext,.bbl .blg .log .dvi .nav .nlo .out .pdf .snm .spl .toc .vrb Notes.bib .idx .ind .ilg,$(patsubst %.tex,%$(ext),$(texsource)))
 	rm -f $(texfinal)
 
 cleanfigs:

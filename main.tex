@@ -11,7 +11,7 @@
 \usepackage{longtable}
 \usepackage[autolanguage]{numprint}
 \usepackage[version=3,arrows=pgf-filled]{mhchem}
-\usepackage{fancyhdr}
+\usepackage{fancyhdr,makeidx}
 \usepackage[linkcolor=black,colorlinks=true,citecolor=black,urlcolor=blue]{hyperref}
 \makeatletter
 \input{preamble}
@@ -20,7 +20,7 @@
 
 \version{0}{1}{0}
 \title{\Antioch\ my love}
-\date{\theversion}
+\date{Version \theversion}
 \author{Paul Bauman \and Benjamin Kirk \and Todd Oliver \and Sylvain Plessis \and Roy Stogner}
 
 \maketitle
@@ -136,6 +136,7 @@
 \label{progflow:kinetics}
 \input{prog_flow_kinetics}
 
+<<<<<<< HEAD
 \chapter{Units}
 \section{List of units supported by \Antioch}
 \label{list_units}
@@ -146,5 +147,7 @@
 {\footnotesize
 \input{units_goodie}
 }
+
+\printindex
 
 \end{document}
