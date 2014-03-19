@@ -1,7 +1,7 @@
 \documentclass{article}
 \usepackage{geometry,tikz}
 \usetikzlibrary{arrows,decorations.markings,calc,fit}
-\geometry{paperwidth=15cm,paperheight=6.8cm,left=2pt,right=2pt,top=2pt,bottom=2pt}
+\geometry{paperwidth=18.5cm,paperheight=6.8cm,left=2pt,right=2pt,top=2pt,bottom=2pt}
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
 \tikzset{%
@@ -18,7 +18,7 @@ createfill/.style={draw,decoration={markings,
                                    },
                                    postaction={decorate}},
 derive/.style={stealth-},
-parameter/.style={font=\footnotesize, fill=white, inner sep=1pt, outer sep=0pt, opacity=0.8, text opacity=1},
+parameter/.style={font=\footnotesize, fill=white, inner sep=1pt, outer sep=0pt, opacity=0.8, text opacity=1, rounded corners},
 limit/.style={dashed, very thick, gray}
 }
 \pgfdeclarelayer{background}
@@ -36,13 +36,19 @@ limit/.style={dashed, very thick, gray}
              ,align=left]    (chemproc) at (reac.east)          {\node{Elementary}; & \node{Duplicate};\\
                                                                  \node{Three body}; & \node{falloff};\\};
 \matrix[objects,right = 1cm 
-             ,align=left]    (kinmod)   at (kinmol.east)        {\node{Hercourt Essen}; & \node{Berthelot};\\
-                                                                 \node{Arrhenius};      & \node{Kooij};\\
-                                                                 \node{Van't Hoff};     & \node{Photochemical};\\};
-\node[parameter,below right = 1mm,
-        align=left]          (par)      at (kineval.south)      {Temperature     (\verb!const StateType &T!)\\
-                                                                 photon flux     (\verb!const ParticleFlux<VectorCoeffType> &pf!) \\
-                                                                 molar densities (\verb!const VectorStateType &dens!)};
+             ,align=left]    (kinmod)   at (kinmol.east)        {\node{Hercourt Essen}; & \node{Berthelot}; & \node{Arrhenius};\\
+                                                                 \node{Berthelot Hercourt Essen};            & \node{Kooij};\\
+                                                                 \node{Van't Hoff}; \\ 
+                                                                 \node{Photochemical};\\};
+\node[parameter,below right,
+        align=left]          (parKE.south east)    
+                                        at (kineval.south east) {Conditions      (temperature, particle flux, \dots)\\
+                                                                 Thermodynamics  ($\frac{h}{\mathrm{R}T} - \frac{s}{\mathrm{R}}$)\\
+                                                                 Molar densities};
+\node[parameter,below = 1pt,
+        align=left]          (parRS)    at ([xshift=-1cm]reacset.south)      {Conditions      (\verb!const ConditionType &condition!)\\
+                                                                 Thermodynamics  (\verb!const ThermodynamicWrap &therm!) \\
+                                                                 Molar densities (\verb!const VectorStateType &dens!)};
 
 \begin{pgfonlayer}{background}
 

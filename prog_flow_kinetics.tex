@@ -1,3 +1,24 @@
+\subsection{The physical object}
+
+A chemical reaction is represented like
+\begin{chemicalEquation}
+\ce{A ->[\text{conditions}][\rate] B}
+\end{chemicalEquation}
+\ce{A} and \ce{B} being any kind of molecular composition
+related through the reaction. The conditions are usually
+simply the temperature. The rate depends on the kinetics
+model and the thermodynamics of the entities \ce{A} and
+\ce{B}. So basically, we have three types of data:
+\begin{itemize}
+\item the rate parameters needed to characterize \rate: 
+                \fwdratecons, the thermodynamics;
+\item the reaction's conditions: usually temperature, but can
+        be also particles flux, some catalysis data, \dots;
+\item the densities of the molecular medium (namely \ce{A}
+        and \ce{B}).
+\end{itemize}
+
+
 Figure~\ref{kinpf} describe the data flow from the upper
 object \KineticsEvaluator\ to the rate constants objects.
 The idea here is to have a light high-level object that will
@@ -6,7 +27,7 @@ and the bulk of the work is in lower-level objects.
 %
 \begin{figure}
 \centering
-\includegraphics{kinetics_relationships}
+\includegraphics[width=\linewidth]{kinetics_relationships}
 \caption{\label{kinpf}Global vision of the kinetics in \Antioch.
 The gray area frames objects that should not be threaded, whereas
 \KineticsEvaluator\ is light and thread-safe. The passed values of
