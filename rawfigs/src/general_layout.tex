@@ -1,0 +1,51 @@
+\documentclass{article}
+\usepackage{geometry,tikz}
+\usetikzlibrary{calc,decorations.markings}
+\geometry{paperwidth=6cm,paperheight=6.5cm,left=0pt,right=0pt,top=2pt,bottom=0pt}
+\pagestyle{empty}
+\begin{document}
+\tikzset{%
+derive/.style={draw,-stealth},
+contain/.style={derive,postaction=decorate,decoration={markings,
+                                     mark= at position 0.5 with
+                                                {
+                                                  \node[draw=none]{\Huge$\cap$};
+                                                }
+                                     }
+                },
+containref/.style={derive,postaction=decorate,decoration={markings,
+                                     mark= at position 0.5 with
+                                                {
+                                                  \node[draw=none]{\huge\&};
+                                                }
+                                     }
+                }
+}
+\pgfdeclarelayer{background}
+\pgfsetlayers{background,main}
+\centering
+\begin{tikzpicture}[every node/.append style={draw, rounded corners}]
+\node            (Model)     at (0,0)             {\textsf{Model}};
+\node[below=1cm] (ModelBase) at (Model.south)     {\textsf{ModelBase}}; \node[xshift=3mm,white,draw=none,rotate=-90,font=\bf] at (ModelBase.east){\MakeUppercase{equations}};
+\node[below=1cm] (Set)       at (ModelBase.south) {\textsf{Set}};
+%
+\node[left=1cm]  (Species)   at (Model.west)      {\textsf{Species}};
+\node            (Mixture)   at (Species.south |- Set)   
+                                                  {\textsf{Mixture}};
+%
+\node[below=2cm] (Evaluator) at (Set.south)       {\textsf{Evaluator}};
+%%%
+\path[derive]     (Model)     -- (ModelBase);
+\path[contain]    (ModelBase) -- (Set);
+\path[contain]    (Species)   -- (Mixture) node[pos=0.5,xshift=-1cm,white,draw=none,rotate=90,font=\bf]{\MakeUppercase{storage}};
+\path[containref] (Mixture)   -- (Set);
+\path[containref] (Set)       -- (Evaluator);
+%%
+\begin{pgfonlayer}{background}
+\shade[left color=gray,right color=white] ([xshift=-1cm,yshift=-1cm]Mixture.south west) 
+                                            rectangle ([yshift=3mm]$(Species.north east)!0.5!(Model.north west)$);
+\shade[left color=white,right color=red!50] ([yshift=3mm]$(Species.north east)!0.5!(Model.north west)$)
+                                            rectangle ([xshift=1cm,yshift=-1cm] Set.south east -| ModelBase.east);
+\end{pgfonlayer}
+\end{tikzpicture}
+\end{document}

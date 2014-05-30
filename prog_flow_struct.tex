@@ -1,0 +1,29 @@
+\Antioch\ has three levels of objects:
+\begin{enumerate}
+\item the \prog{Species} objects, used as storage for species 
+        physical quantities, per species;
+\item the \prog{Mixture} objects, used as storage around the
+        species;
+\item the \prog{Model} objects, they are the basic equation
+        for a physical quantity to be computed, they
+        contain the necessary parameters for the calculation;
+\item the \prog{Set} objects, they are more or less wrappers
+        around the the models, contain the \prog{Mixture} object
+        and make the links between the storage and the
+        models, if there is a need;
+\item the \prog{Evaluator} objects, they are designed to be
+        small, on top of all other things, they are but the
+        interface to the guts of \Antioch\ to provide
+        the information the user wants.
+\end{enumerate}
+
+A \prog{Model} object always derives from a \prog{ModelBase}
+object, so as to enable multiple choices at run time. The
+\prog{Set} object therefore has a \stdvector\ of pointers
+of the base objects.
+
+\begin{figure}
+\centering
+\includegraphics{general_layout}
+\caption{\label{Antioch:layout}General layout of \Antioch}
+\end{figure}
