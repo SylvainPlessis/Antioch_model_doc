@@ -326,3 +326,15 @@
 \textsf{#1}
 \end{minipage}}
 }
+
+\def\@endpart#1{\vfil\hfil\includegraphics{#1}\newpage
+              \if@twoside
+               \if@openright
+                \null
+                \thispagestyle{empty}%
+                \newpage
+               \fi
+              \fi
+              \if@tempswa
+                \twocolumn
+              \fi}

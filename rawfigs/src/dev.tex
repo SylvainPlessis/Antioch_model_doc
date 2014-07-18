@@ -1,15 +1,166 @@
 \documentclass{article}
 \usepackage{geometry,tikz}
+\usepackage[T1]{fontenc}
 \usetikzlibrary{shapes.geometric}
-\geometry{paperheight=12cm,paperwidth=8cm,left=5pt,right=0pt,top=2pt,bottom=0pt}
+\geometry{paperheight=10cm,paperwidth=9cm,left=5pt,right=0pt,top=2pt,bottom=0pt}
 \pagestyle{empty}
 \begin{document}
+\def\bugstart{%
+\begingroup%
+\catcode`\^=11\relax%
+\catcode`\_=11\relax%
+\catcode`\&=11\relax%
+\catcode`\^^M=11\relax%
+\bugend}
+\def\bugend#1{\tt\noindent#1\endgroup}
 \centering
 \begin{tikzpicture}
 \shadedraw[rounded corners] (-2,-4.5) -- ++(4,0) -- ++(-0.1,1) -- ++(-3.8,0) -- cycle;
 \shadedraw[rounded corners,bottom color=gray,top color=white] (-0.25,-3) rectangle ++(0.5,-1);
 \draw[fill=black,double,double distance=2pt,very thick,rounded corners=8pt] (-3,-3) rectangle ++(6,6);
-\node[white,font=\small\tt] at (0,0) {**Bug: make a better algorithm!!**};
+\begin{scope}
+\clip (-3,-3) rectangle (3,3);
+\node[white,text width=15cm,scale=0.4,anchor=west,align=flush left] at (-2.9,0) {%
+\bugstart{%
+In file included from ../../src/kinetics/include/antioch/photochemical_rate.h:29:0,
+                 from ../../src/kinetics/include/antioch/reaction.h:43,
+                 from ../../src/kinetics/include/antioch/reaction_set.h:34,
+                 from ../../test/kinetics_vec_unit.C:57:
+../../src/particles_flux/include/antioch/sigma_bin_converter.h: In instantiation of `void Antioch::SigmaBinConverter<VectorCoeffType>::y_on_custom_grid(const VectorCoeffType&, const VectorCoeffType&, const VectorStateType&, VectorStateType&) const [with VectorStateType = std::vector<std::valarray<float>, std::allocator<std::valarray<float> > >; VectorCoeffType = std::vector<float, std::allocator<float> >]':
+../../src/kinetics/include/antioch/photochemical_rate.h:150:7:   required from `typename Antioch::value_type<VectorStateType>::type Antioch::PhotochemicalRate<CoeffType, VectorCoeffType>::rate(const Antioch::ParticleFlux<VectorStateType>&) const [with VectorStateType = std::vector<std::valarray<float>, std::allocator<std::valarray<float> > >; CoeffType = float; VectorCoeffType = std::vector<float, std::allocator<float> >; typename Antioch::value_type<VectorStateType>::type = std::valarray<float>]'
+../../src/kinetics/include/antioch/kinetics_type.h:198:131:   required from `StateType Antioch::KineticsType<CoeffType, VectorCoeffType>::operator()(const Antioch::KineticsConditions<StateType, VectorStateType>&) const [with StateType = std::valarray<float>; VectorStateType = std::vector<std::valarray<float>, std::allocator<std::valarray<float> > >; CoeffType = float; VectorCoeffType = std::vector<float, std::allocator<float> >]'
+../../src/kinetics/include/antioch/elementary_reaction.h:122:13:   required from `StateType Antioch::ElementaryReaction<CoeffType>::compute_forward_rate_coefficient(const VectorStateType&, const Antioch::KineticsConditions<StateType, VectorStateType>&) const [with StateType = std::valarray<float>; VectorStateType = std::vector<std::valarray<float>, std::allocator<std::valarray<float> > >; CoeffType = float]'
+../../src/kinetics/include/antioch/reaction.h:731:136:   required from `StateType Antioch::Reaction<CoeffType, VectorCoeffType>::compute_forward_rate_coefficient(const VectorStateType&, const Antioch::KineticsConditions<StateType, VectorStateType>&) const [with StateType = std::valarray<float>; VectorStateType = std::vector<std::valarray<float>, std::allocator<std::valarray<float> > >; CoeffType = float; VectorCoeffType = std::vector<float, std::allocator<float> >]'
+../../src/kinetics/include/antioch/reaction.h:829:87:   required from `StateType Antioch::Reaction<CoeffType, VectorCoeffType>::compute_rate_of_progress(const VectorStateType&, const Antioch::KineticsConditions<StateType, VectorStateType>&, const StateType&, const VectorStateType&) const [with StateType = std::valarray<float>; VectorStateType = std::vector<std::valarray<float>, std::allocator<std::valarray<float> > >; CoeffType = float; VectorCoeffType = std::vector<float, std::allocator<float> >]'
+../../src/kinetics/include/antioch/reaction_set.h:231:33:   required from `void Antioch::ReactionSet<CoeffType>::compute_reaction_rates(const Antioch::KineticsConditions<StateType, VectorStateType>&, const VectorStateType&, const VectorStateType&, VectorReactionsType&) const [with StateType = std::valarray<float>; VectorStateType = std::vector<std::valarray<float>, std::allocator<std::valarray<float> > >; VectorReactionsType = std::vector<std::valarray<float>, std::allocator<std::valarray<float> > >; CoeffType = float]'
+../../src/kinetics/include/antioch/kinetics_evaluator.h:194:5:   required from `void Antioch::KineticsEvaluator<CoeffType, StateType>::compute_mole_sources(const Antioch::KineticsConditions<StateType, VectorStateType>&, const VectorStateType&, const VectorStateType&, VectorStateType&) [with VectorStateType = std::vector<std::valarray<float>, std::allocator<std::valarray<float> > >; CoeffType = float; StateType = std::valarray<float>]'
+../../src/kinetics/include/antioch/kinetics_evaluator.h:235:5:   required from `void Antioch::KineticsEvaluator<CoeffType, StateType>::compute_mass_sources(const Antioch::KineticsConditions<StateType, VectorStateType>&, const VectorStateType&, const VectorStateType&, VectorStateType&) [with VectorStateType = std::vector<std::valarray<float>, std::allocator<std::valarray<float> > >; CoeffType = float; StateType = std::valarray<float>]'
+../../test/kinetics_vec_unit.C:162:7:   required from `int vectester(const string&, const PairScalars&, const string&) [with PairScalars = std::valarray<float>; std::string = std::basic_string<char>]'
+../../test/kinetics_vec_unit.C:216:84:   required from here
+../../src/particles_flux/include/antioch/sigma_bin_converter.h:79:36: erreur: invalid cast from type `const value_type {aka const std::valarray<float>}' to type `ScalarType {aka float}'
+   while((ScalarType)x_custom[ilow] < x_old.front() && ilow < x_custom.size())ilow++; //skipping too low bins
+                                    ^
+../../src/particles_flux/include/antioch/sigma_bin_converter.h:85:6: erreur: could not convert `std::operator&&<std::_BinClos<std::__equal_to, std::_Constant, std::_ValArray, float, float>, std::_BinClos<std::__equal_to, std::_Constant, std::_ValArray, float, float> >((*(const std::_Expr<std::_BinClos<std::__equal_to, std::_Constant, std::_ValArray, float, float>, bool>*)(& std::operator==<float>((* &(& x_old)->std::vector<_Tp, _Alloc>::operator[]<float, std::allocator<float> >(((std::vector<float, std::allocator<float> >::size_type)(j + 4294967295u)))), (* &(& x_custom)->std::vector<_Tp, _Alloc>::operator[]<std::valarray<float>, std::allocator<std::valarray<float> > >(((std::vector<std::valarray<float>, std::allocator<std::valarray<float> > >::size_type)i)))))), (*(const std::_Expr<std::_BinClos<std::__equal_to, std::_Constant, std::_ValArray, float, float>, bool>*)(& std::operator==<float>((* &(& x_old)->std::vector<_Tp, _Alloc>::operator[]<float, std::allocator<float> >(((std::vector<float, std::allocator<float> >::size_type)j))), (* &(& x_custom)->std::vector<_Tp, _Alloc>::operator[]<std::valarray<float>, std::allocator<std::valarray<float> > >(((std::vector<std::valarray<float>, std::allocator<std::valarray<float> > >::size_type)(i + 1u))))))))' from `std::_Expr<std::_BinClos<std::__logical_and, std::_Expr, std::_Expr, std::_BinClos<std::__equal_to, std::_Constant, std::_ValArray, float, float>, std::_BinClos<std::__equal_to, std::_Constant, std::_ValArray, float, float> >, bool>' to `bool'
+      while(x_old[j-1] == x_custom[i] && x_old[j] == x_custom[i+1])
+      ^
+../../src/particles_flux/include/antioch/sigma_bin_converter.h:93:6: erreur: could not convert `std::operator< <float>((* &(& x_old)->std::vector<_Tp, _Alloc>::back<float, std::allocator<float> >()), (* &(& x_custom)->std::vector<_Tp, _Alloc>::operator[]<std::valarray<float>, std::allocator<std::valarray<float> > >(((std::vector<std::valarray<float>, std::allocator<std::valarray<float> > >::size_type)i))))' from `std::_Expr<std::_BinClos<std::__less, std::_Constant, std::_ValArray, float, float>, bool>' to `bool'
+      if(x_old.back() < x_custom[i])return;
+      ^
+../../src/particles_flux/include/antioch/sigma_bin_converter.h:94:6: erreur: could not convert `std::operator<=<float>((* &(& x_old)->std::vector<_Tp, _Alloc>::operator[]<float, std::allocator<float> >(((std::vector<float, std::allocator<float> >::size_type)j))), (* &(& x_custom)->std::vector<_Tp, _Alloc>::operator[]<std::valarray<float>, std::allocator<std::valarray<float> > >(((std::vector<std::valarray<float>, std::allocator<std::valarray<float> > >::size_type)i))))' from `std::_Expr<std::_BinClos<std::__less_equal, std::_Constant, std::_ValArray, float, float>, bool>' to `bool'
+      while(x_old[j] <= x_custom[i]) //find lowest j / x_custom[i] < x_old[j]
+      ^
+../../src/particles_flux/include/antioch/sigma_bin_converter.h:106:8: erreur: could not convert `std::operator<=<float>((* &(& x_custom)->std::vector<_Tp, _Alloc>::operator[]<std::valarray<float>, std::allocator<std::valarray<float> > >(((std::vector<std::valarray<float>, std::allocator<std::valarray<float> > >::size_type)(i + 1u)))), (* &(& x_old)->std::vector<_Tp, _Alloc>::operator[]<float, std::allocator<float> >(((std::vector<float, std::allocator<float> >::size_type)j))))' from `std::_Expr<std::_BinClos<std::__less_equal, std::_ValArray, std::_Constant, float, float>, bool>' to `bool'
+        while(x_custom[i+1] <= x_old[j])
+        ^
+In file included from ../../src/kinetics/include/antioch/photochemical_rate.h:29:0,
+                 from ../../src/kinetics/include/antioch/reaction.h:43,
+                 from ../../src/kinetics/include/antioch/reaction_set.h:34,
+                 from ../../test/kinetics_vec_unit.C:57:
+../../src/particles_flux/include/antioch/sigma_bin_converter.h:115:10: erreur: cannot convert `std::_Expr<std::_BinClos<std::__multiplies, std::_Constant, std::_Expr, float, std::_BinClos<std::__minus, std::_Constant, std::_ValArray, float, float> >, float>' to `ScalarType {aka float}' in assignment
+      bin = y_old[j-1] * (x_old[j] - x_custom[i]); 
+          ^
+../../src/particles_flux/include/antioch/sigma_bin_converter.h:122:9: erreur: could not convert `std::operator><float>((* &(& x_old)->std::vector<_Tp, _Alloc>::operator[]<float, std::allocator<float> >(((std::vector<float, std::allocator<float> >::size_type)j))), (* &(& x_custom)->std::vector<_Tp, _Alloc>::operator[]<std::valarray<float>, std::allocator<std::valarray<float> > >(((std::vector<std::valarray<float>, std::allocator<std::valarray<float> > >::size_type)(i + 1u)))))' from `std::_Expr<std::_BinClos<std::__greater, std::_Constant, std::_ValArray, float, float>, bool>' to `bool'
+         if(x_old[j] > x_custom[i+1])break;
+         ^
+../../src/particles_flux/include/antioch/sigma_bin_converter.h:127:34: erreur: no match for `operator+=' (operand types are `ScalarType {aka float}' and `std::_Expr<std::_BinClos<std::__multiplies, std::_Constant, std::_Expr, float, std::_BinClos<std::__minus, std::_ValArray, std::_Constant, float, float> >, float>')
+      if(j < x_old.size() - 1)bin += y_old[j-2] * (x_custom[i+1] - x_old[j-1]); //if exist, above rectangle
+                                  ^
+In file included from ../../src/kinetics/include/antioch/photochemical_rate.h:29:0,
+                 from ../../src/kinetics/include/antioch/reaction.h:43,
+                 from ../../src/kinetics/include/antioch/reaction_set.h:34,
+                 from ../../test/kinetics_vec_unit.C:57:
+../../src/particles_flux/include/antioch/sigma_bin_converter.h: In instantiation of `void Antioch::SigmaBinConverter<VectorCoeffType>::y_on_custom_grid(const VectorCoeffType&, const VectorCoeffType&, const VectorStateType&, VectorStateType&) const [with VectorStateType = std::vector<std::valarray<double>, std::allocator<std::valarray<double> > >; VectorCoeffType = std::vector<double>]':
+../../src/kinetics/include/antioch/photochemical_rate.h:150:7:   required from `typename Antioch::value_type<VectorStateType>::type Antioch::PhotochemicalRate<CoeffType, VectorCoeffType>::rate(const Antioch::ParticleFlux<VectorStateType>&) const [with VectorStateType = std::vector<std::valarray<double>, std::allocator<std::valarray<double> > >; CoeffType = double; VectorCoeffType = std::vector<double>; typename Antioch::value_type<VectorStateType>::type = std::valarray<double>]'
+../../src/kinetics/include/antioch/kinetics_type.h:198:131:   required from `StateType Antioch::KineticsType<CoeffType, VectorCoeffType>::operator()(const Antioch::KineticsConditions<StateType, VectorStateType>&) const [with StateType = std::valarray<double>; VectorStateType = std::vector<std::valarray<double>, std::allocator<std::valarray<double> > >; CoeffType = double; VectorCoeffType = std::vector<double>]'
+../../src/kinetics/include/antioch/elementary_reaction.h:122:13:   required from `StateType Antioch::ElementaryReaction<CoeffType>::compute_forward_rate_coefficient(const VectorStateType&, const Antioch::KineticsConditions<StateType, VectorStateType>&) const [with StateType = std::valarray<double>; VectorStateType = std::vector<std::valarray<double>, std::allocator<std::valarray<double> > >; CoeffType = double]'
+../../src/kinetics/include/antioch/reaction.h:731:136:   required from `StateType Antioch::Reaction<CoeffType, VectorCoeffType>::compute_forward_rate_coefficient(const VectorStateType&, const Antioch::KineticsConditions<StateType, VectorStateType>&) const [with StateType = std::valarray<double>; VectorStateType = std::vector<std::valarray<double>, std::allocator<std::valarray<double> > >; CoeffType = double; VectorCoeffType = std::vector<double>]'
+../../src/kinetics/include/antioch/reaction.h:829:87:   required from `StateType Antioch::Reaction<CoeffType, VectorCoeffType>::compute_rate_of_progress(const VectorStateType&, const Antioch::KineticsConditions<StateType, VectorStateType>&, const StateType&, const VectorStateType&) const [with StateType = std::valarray<double>; VectorStateType = std::vector<std::valarray<double>, std::allocator<std::valarray<double> > >; CoeffType = double; VectorCoeffType = std::vector<double>]'
+../../src/kinetics/include/antioch/reaction_set.h:231:33:   required from `void Antioch::ReactionSet<CoeffType>::compute_reaction_rates(const Antioch::KineticsConditions<StateType, VectorStateType>&, const VectorStateType&, const VectorStateType&, VectorReactionsType&) const [with StateType = std::valarray<double>; VectorStateType = std::vector<std::valarray<double>, std::allocator<std::valarray<double> > >; VectorReactionsType = std::vector<std::valarray<double>, std::allocator<std::valarray<double> > >; CoeffType = double]'
+../../src/kinetics/include/antioch/kinetics_evaluator.h:194:5:   required from `void Antioch::KineticsEvaluator<CoeffType, StateType>::compute_mole_sources(const Antioch::KineticsConditions<StateType, VectorStateType>&, const VectorStateType&, const VectorStateType&, VectorStateType&) [with VectorStateType = std::vector<std::valarray<double>, std::allocator<std::valarray<double> > >; CoeffType = double; StateType = std::valarray<double>]'
+../../src/kinetics/include/antioch/kinetics_evaluator.h:235:5:   required from `void Antioch::KineticsEvaluator<CoeffType, StateType>::compute_mass_sources(const Antioch::KineticsConditions<StateType, VectorStateType>&, const VectorStateType&, const VectorStateType&, VectorStateType&) [with VectorStateType = std::vector<std::valarray<double>, std::allocator<std::valarray<double> > >; CoeffType = double; StateType = std::valarray<double>]'
+../../test/kinetics_vec_unit.C:162:7:   required from `int vectester(const string&, const PairScalars&, const string&) [with PairScalars = std::valarray<double>; std::string = std::basic_string<char>]'
+../../test/kinetics_vec_unit.C:218:86:   required from here
+../../src/particles_flux/include/antioch/sigma_bin_converter.h:79:36: erreur: invalid cast from type `const value_type {aka const std::valarray<double>}' to type `ScalarType {aka double}'
+   while((ScalarType)x_custom[ilow] < x_old.front() && ilow < x_custom.size())ilow++; //skipping too low bins
+                                    ^
+../../src/particles_flux/include/antioch/sigma_bin_converter.h:85:6: erreur: could not convert `std::operator&&<std::_BinClos<std::__equal_to, std::_Constant, std::_ValArray, double, double>, std::_BinClos<std::__equal_to, std::_Constant, std::_ValArray, double, double> >((*(const std::_Expr<std::_BinClos<std::__equal_to, std::_Constant, std::_ValArray, double, double>, bool>*)(& std::operator==<double>((* &(& x_old)->std::vector<_Tp, _Alloc>::operator[]<double, std::allocator<double> >(((std::vector<double>::size_type)(j + 4294967295u)))), (* &(& x_custom)->std::vector<_Tp, _Alloc>::operator[]<std::valarray<double>, std::allocator<std::valarray<double> > >(((std::vector<std::valarray<double>, std::allocator<std::valarray<double> > >::size_type)i)))))), (*(const std::_Expr<std::_BinClos<std::__equal_to, std::_Constant, std::_ValArray, double, double>, bool>*)(& std::operator==<double>((* &(& x_old)->std::vector<_Tp, _Alloc>::operator[]<double, std::allocator<double> >(((std::vector<double>::size_type)j))), (* &(& x_custom)->std::vector<_Tp, _Alloc>::operator[]<std::valarray<double>, std::allocator<std::valarray<double> > >(((std::vector<std::valarray<double>, std::allocator<std::valarray<double> > >::size_type)(i + 1u))))))))' from `std::_Expr<std::_BinClos<std::__logical_and, std::_Expr, std::_Expr, std::_BinClos<std::__equal_to, std::_Constant, std::_ValArray, double, double>, std::_BinClos<std::__equal_to, std::_Constant, std::_ValArray, double, double> >, bool>' to `bool'
+      while(x_old[j-1] == x_custom[i] && x_old[j] == x_custom[i+1])
+      ^
+../../src/particles_flux/include/antioch/sigma_bin_converter.h:93:6: erreur: could not convert `std::operator< <double>((* &(& x_old)->std::vector<_Tp, _Alloc>::back<double, std::allocator<double> >()), (* &(& x_custom)->std::vector<_Tp, _Alloc>::operator[]<std::valarray<double>, std::allocator<std::valarray<double> > >(((std::vector<std::valarray<double>, std::allocator<std::valarray<double> > >::size_type)i))))' from `std::_Expr<std::_BinClos<std::__less, std::_Constant, std::_ValArray, double, double>, bool>' to `bool'
+      if(x_old.back() < x_custom[i])return;
+      ^
+../../src/particles_flux/include/antioch/sigma_bin_converter.h:94:6: erreur: could not convert `std::operator<=<double>((* &(& x_old)->std::vector<_Tp, _Alloc>::operator[]<double, std::allocator<double> >(((std::vector<double>::size_type)j))), (* &(& x_custom)->std::vector<_Tp, _Alloc>::operator[]<std::valarray<double>, std::allocator<std::valarray<double> > >(((std::vector<std::valarray<double>, std::allocator<std::valarray<double> > >::size_type)i))))' from `std::_Expr<std::_BinClos<std::__less_equal, std::_Constant, std::_ValArray, double, double>, bool>' to `bool'
+      while(x_old[j] <= x_custom[i]) //find lowest j / x_custom[i] < x_old[j]
+      ^
+../../src/particles_flux/include/antioch/sigma_bin_converter.h:106:8: erreur: could not convert `std::operator<=<double>((* &(& x_custom)->std::vector<_Tp, _Alloc>::operator[]<std::valarray<double>, std::allocator<std::valarray<double> > >(((std::vector<std::valarray<double>, std::allocator<std::valarray<double> > >::size_type)(i + 1u)))), (* &(& x_old)->std::vector<_Tp, _Alloc>::operator[]<double, std::allocator<double> >(((std::vector<double>::size_type)j))))' from `std::_Expr<std::_BinClos<std::__less_equal, std::_ValArray, std::_Constant, double, double>, bool>' to `bool'
+        while(x_custom[i+1] <= x_old[j])
+        ^
+In file included from ../../src/kinetics/include/antioch/photochemical_rate.h:29:0,
+                 from ../../src/kinetics/include/antioch/reaction.h:43,
+                 from ../../src/kinetics/include/antioch/reaction_set.h:34,
+                 from ../../test/kinetics_vec_unit.C:57:
+../../src/particles_flux/include/antioch/sigma_bin_converter.h:115:10: erreur: cannot convert `std::_Expr<std::_BinClos<std::__multiplies, std::_Constant, std::_Expr, double, std::_BinClos<std::__minus, std::_Constant, std::_ValArray, double, double> >, double>' to `ScalarType {aka double}' in assignment
+      bin = y_old[j-1] * (x_old[j] - x_custom[i]); 
+          ^
+../../src/particles_flux/include/antioch/sigma_bin_converter.h:122:9: erreur: could not convert `std::operator><double>((* &(& x_old)->std::vector<_Tp, _Alloc>::operator[]<double, std::allocator<double> >(((std::vector<double>::size_type)j))), (* &(& x_custom)->std::vector<_Tp, _Alloc>::operator[]<std::valarray<double>, std::allocator<std::valarray<double> > >(((std::vector<std::valarray<double>, std::allocator<std::valarray<double> > >::size_type)(i + 1u)))))' from `std::_Expr<std::_BinClos<std::__greater, std::_Constant, std::_ValArray, double, double>, bool>' to `bool'
+         if(x_old[j] > x_custom[i+1])break;
+         ^
+../../src/particles_flux/include/antioch/sigma_bin_converter.h:127:34: erreur: no match for `operator+=' (operand types are `ScalarType {aka double}' and `std::_Expr<std::_BinClos<std::__multiplies, std::_Constant, std::_Expr, double, std::_BinClos<std::__minus, std::_ValArray, std::_Constant, double, double> >, double>')
+      if(j < x_old.size() - 1)bin += y_old[j-2] * (x_custom[i+1] - x_old[j-1]); //if exist, above rectangle
+                                  ^
+In file included from ../../src/kinetics/include/antioch/photochemical_rate.h:29:0,
+                 from ../../src/kinetics/include/antioch/reaction.h:43,
+                 from ../../src/kinetics/include/antioch/reaction_set.h:34,
+                 from ../../test/kinetics_vec_unit.C:57:
+../../src/particles_flux/include/antioch/sigma_bin_converter.h: In instantiation of `void Antioch::SigmaBinConverter<VectorCoeffType>::y_on_custom_grid(const VectorCoeffType&, const VectorCoeffType&, const VectorStateType&, VectorStateType&) const [with VectorStateType = std::vector<std::valarray<long double>, std::allocator<std::valarray<long double> > >; VectorCoeffType = std::vector<long double, std::allocator<long double> >]':
+../../src/kinetics/include/antioch/photochemical_rate.h:150:7:   required from `typename Antioch::value_type<VectorStateType>::type Antioch::PhotochemicalRate<CoeffType, VectorCoeffType>::rate(const Antioch::ParticleFlux<VectorStateType>&) const [with VectorStateType = std::vector<std::valarray<long double>, std::allocator<std::valarray<long double> > >; CoeffType = long double; VectorCoeffType = std::vector<long double, std::allocator<long double> >; typename Antioch::value_type<VectorStateType>::type = std::valarray<long double>]'
+../../src/kinetics/include/antioch/kinetics_type.h:198:131:   required from `StateType Antioch::KineticsType<CoeffType, VectorCoeffType>::operator()(const Antioch::KineticsConditions<StateType, VectorStateType>&) const [with StateType = std::valarray<long double>; VectorStateType = std::vector<std::valarray<long double>, std::allocator<std::valarray<long double> > >; CoeffType = long double; VectorCoeffType = std::vector<long double, std::allocator<long double> >]'
+../../src/kinetics/include/antioch/elementary_reaction.h:122:13:   required from `StateType Antioch::ElementaryReaction<CoeffType>::compute_forward_rate_coefficient(const VectorStateType&, const Antioch::KineticsConditions<StateType, VectorStateType>&) const [with StateType = std::valarray<long double>; VectorStateType = std::vector<std::valarray<long double>, std::allocator<std::valarray<long double> > >; CoeffType = long double]'
+../../src/kinetics/include/antioch/reaction.h:731:136:   required from `StateType Antioch::Reaction<CoeffType, VectorCoeffType>::compute_forward_rate_coefficient(const VectorStateType&, const Antioch::KineticsConditions<StateType, VectorStateType>&) const [with StateType = std::valarray<long double>; VectorStateType = std::vector<std::valarray<long double>, std::allocator<std::valarray<long double> > >; CoeffType = long double; VectorCoeffType = std::vector<long double, std::allocator<long double> >]'
+../../src/kinetics/include/antioch/reaction.h:829:87:   required from `StateType Antioch::Reaction<CoeffType, VectorCoeffType>::compute_rate_of_progress(const VectorStateType&, const Antioch::KineticsConditions<StateType, VectorStateType>&, const StateType&, const VectorStateType&) const [with StateType = std::valarray<long double>; VectorStateType = std::vector<std::valarray<long double>, std::allocator<std::valarray<long double> > >; CoeffType = long double; VectorCoeffType = std::vector<long double, std::allocator<long double> >]'
+../../src/kinetics/include/antioch/reaction_set.h:231:33:   required from `void Antioch::ReactionSet<CoeffType>::compute_reaction_rates(const Antioch::KineticsConditions<StateType, VectorStateType>&, const VectorStateType&, const VectorStateType&, VectorReactionsType&) const [with StateType = std::valarray<long double>; VectorStateType = std::vector<std::valarray<long double>, std::allocator<std::valarray<long double> > >; VectorReactionsType = std::vector<std::valarray<long double>, std::allocator<std::valarray<long double> > >; CoeffType = long double]'
+../../src/kinetics/include/antioch/kinetics_evaluator.h:194:5:   required from `void Antioch::KineticsEvaluator<CoeffType, StateType>::compute_mole_sources(const Antioch::KineticsConditions<StateType, VectorStateType>&, const VectorStateType&, const VectorStateType&, VectorStateType&) [with VectorStateType = std::vector<std::valarray<long double>, std::allocator<std::valarray<long double> > >; CoeffType = long double; StateType = std::valarray<long double>]'
+../../src/kinetics/include/antioch/kinetics_evaluator.h:235:5:   required from `void Antioch::KineticsEvaluator<CoeffType, StateType>::compute_mass_sources(const Antioch::KineticsConditions<StateType, VectorStateType>&, const VectorStateType&, const VectorStateType&, VectorStateType&) [with VectorStateType = std::vector<std::valarray<long double>, std::allocator<std::valarray<long double> > >; CoeffType = long double; StateType = std::valarray<long double>]'
+../../test/kinetics_vec_unit.C:162:7:   required from `int vectester(const string&, const PairScalars&, const string&) [with PairScalars = std::valarray<long double>; std::string = std::basic_string<char>]'
+../../test/kinetics_vec_unit.C:220:87:   required from here
+../../src/particles_flux/include/antioch/sigma_bin_converter.h:79:36: erreur: invalid cast from type `const value_type {aka const std::valarray<long double>}' to type `ScalarType {aka long double}'
+   while((ScalarType)x_custom[ilow] < x_old.front() && ilow < x_custom.size())ilow++; //skipping too low bins
+                                    ^
+../../src/particles_flux/include/antioch/sigma_bin_converter.h:85:6: erreur: could not convert `std::operator&&<std::_BinClos<std::__equal_to, std::_Constant, std::_ValArray, long double, long double>, std::_BinClos<std::__equal_to, std::_Constant, std::_ValArray, long double, long double> >((*(const std::_Expr<std::_BinClos<std::__equal_to, std::_Constant, std::_ValArray, long double, long double>, bool>*)(& std::operator==<long double>((* &(& x_old)->std::vector<_Tp, _Alloc>::operator[]<long double, std::allocator<long double> >(((std::vector<long double, std::allocator<long double> >::size_type)(j + 4294967295u)))), (* &(& x_custom)->std::vector<_Tp, _Alloc>::operator[]<std::valarray<long double>, std::allocator<std::valarray<long double> > >(((std::vector<std::valarray<long double>, std::allocator<std::valarray<long double> > >::size_type)i)))))), (*(const std::_Expr<std::_BinClos<std::__equal_to, std::_Constant, std::_ValArray, long double, long double>, bool>*)(& std::operator==<long double>((* &(& x_old)->std::vector<_Tp, _Alloc>::operator[]<long double, std::allocator<long double> >(((std::vector<long double, std::allocator<long double> >::size_type)j))), (* &(& x_custom)->std::vector<_Tp, _Alloc>::operator[]<std::valarray<long double>, std::allocator<std::valarray<long double> > >(((std::vector<std::valarray<long double>, std::allocator<std::valarray<long double> > >::size_type)(i + 1u))))))))' from `std::_Expr<std::_BinClos<std::__logical_and, std::_Expr, std::_Expr, std::_BinClos<std::__equal_to, std::_Constant, std::_ValArray, long double, long double>, std::_BinClos<std::__equal_to, std::_Constant, std::_ValArray, long double, long double> >, bool>' to `bool'
+      while(x_old[j-1] == x_custom[i] && x_old[j] == x_custom[i+1])
+      ^
+../../src/particles_flux/include/antioch/sigma_bin_converter.h:93:6: erreur: could not convert `std::operator< <long double>((* &(& x_old)->std::vector<_Tp, _Alloc>::back<long double, std::allocator<long double> >()), (* &(& x_custom)->std::vector<_Tp, _Alloc>::operator[]<std::valarray<long double>, std::allocator<std::valarray<long double> > >(((std::vector<std::valarray<long double>, std::allocator<std::valarray<long double> > >::size_type)i))))' from `std::_Expr<std::_BinClos<std::__less, std::_Constant, std::_ValArray, long double, long double>, bool>' to `bool'
+      if(x_old.back() < x_custom[i])return;
+      ^
+../../src/particles_flux/include/antioch/sigma_bin_converter.h:94:6: erreur: could not convert `std::operator<=<long double>((* &(& x_old)->std::vector<_Tp, _Alloc>::operator[]<long double, std::allocator<long double> >(((std::vector<long double, std::allocator<long double> >::size_type)j))), (* &(& x_custom)->std::vector<_Tp, _Alloc>::operator[]<std::valarray<long double>, std::allocator<std::valarray<long double> > >(((std::vector<std::valarray<long double>, std::allocator<std::valarray<long double> > >::size_type)i))))' from `std::_Expr<std::_BinClos<std::__less_equal, std::_Constant, std::_ValArray, long double, long double>, bool>' to `bool'
+      while(x_old[j] <= x_custom[i]) //find lowest j / x_custom[i] < x_old[j]
+      ^
+../../src/particles_flux/include/antioch/sigma_bin_converter.h:106:8: erreur: could not convert `std::operator<=<long double>((* &(& x_custom)->std::vector<_Tp, _Alloc>::operator[]<std::valarray<long double>, std::allocator<std::valarray<long double> > >(((std::vector<std::valarray<long double>, std::allocator<std::valarray<long double> > >::size_type)(i + 1u)))), (* &(& x_old)->std::vector<_Tp, _Alloc>::operator[]<long double, std::allocator<long double> >(((std::vector<long double, std::allocator<long double> >::size_type)j))))' from `std::_Expr<std::_BinClos<std::__less_equal, std::_ValArray, std::_Constant, long double, long double>, bool>' to `bool'
+        while(x_custom[i+1] <= x_old[j])
+        ^
+In file included from ../../src/kinetics/include/antioch/photochemical_rate.h:29:0,
+                 from ../../src/kinetics/include/antioch/reaction.h:43,
+                 from ../../src/kinetics/include/antioch/reaction_set.h:34,
+                 from ../../test/kinetics_vec_unit.C:57:
+../../src/particles_flux/include/antioch/sigma_bin_converter.h:115:10: erreur: cannot convert `std::_Expr<std::_BinClos<std::__multiplies, std::_Constant, std::_Expr, long double, std::_BinClos<std::__minus, std::_Constant, std::_ValArray, long double, long double> >, long double>' to `ScalarType {aka long double}' in assignment
+      bin = y_old[j-1] * (x_old[j] - x_custom[i]); 
+          ^
+../../src/particles_flux/include/antioch/sigma_bin_converter.h:122:9: erreur: could not convert `std::operator><long double>((* &(& x_old)->std::vector<_Tp, _Alloc>::operator[]<long double, std::allocator<long double> >(((std::vector<long double, std::allocator<long double> >::size_type)j))), (* &(& x_custom)->std::vector<_Tp, _Alloc>::operator[]<std::valarray<long double>, std::allocator<std::valarray<long double> > >(((std::vector<std::valarray<long double>, std::allocator<std::valarray<long double> > >::size_type)(i + 1u)))))' from `std::_Expr<std::_BinClos<std::__greater, std::_Constant, std::_ValArray, long double, long double>, bool>' to `bool'
+         if(x_old[j] > x_custom[i+1])break;
+         ^
+../../src/particles_flux/include/antioch/sigma_bin_converter.h:127:34: erreur: no match for `operator+=' (operand types are `ScalarType {aka long double}' and `std::_Expr<std::_BinClos<std::__multiplies, std::_Constant, std::_Expr, long double, std::_BinClos<std::__minus, std::_ValArray, std::_Constant, long double, long double> >, long double>')
+      if(j < x_old.size() - 1)bin += y_old[j-2] * (x_custom[i+1] - x_old[j-1]); //if exist, above rectangle
+                                  ^
+make[3]: *** [kinetics_vec_unit.o] Erreur 1
+make[3]: quittant le répertoire « /home/sylvain/local/antioch/sylvain/build-local/test »
+make[2]: *** [check-am] Erreur 2
+make[2]: quittant le répertoire « /home/sylvain/local/antioch/sylvain/build-local/test »
+make[1]: *** [check-recursive] Erreur 1
+make[1]: quittant le répertoire « /home/sylvain/local/antioch/sylvain/build-local »
+make: *** [check] Erreur 2
+}
+};
+\end{scope}
 %% keyboard
 \draw[rounded corners] (-2.5,-6.5) -- ++(4,0) -- ++(-0.1,1) -- ++(-3.8,0) -- cycle;
 \draw[rounded corners=2pt] (1.2,-5.5) \foreach \p in {1,...,20}{ -- ++(0.5*rnd,0.3*rnd)};
@@ -23,5 +174,14 @@
   \draw[xscale=-1] (-2.5,-6.5) .. controls ++(0.5,0) and ++(0.5,-0.25)  .. ++(0,1) 
                    (-2.5,-5.5) -- ++(0,-0.5) arc(-90:-70:1);
 \draw[rounded corners=2pt] (2.5,-5.5) -- (2.5,-5.3) \foreach \p in {1,...,12}{ -- ++(0.4*rnd,0.2*rnd)};
+
+%dev
+\draw[thick] (5.5,1) circle(1cm);
+\draw[thick] (6,0) -- ++(-120:1) --++(130:1) coordinate (a)
+                                ++(-120:5pt) arc(-130:-160:8pt) arc(-160:-100:8pt)
+             arc(-100:-130:8pt) ++(-145:2pt) arc(-130:-160:5pt) arc(-160:-100:5pt)
+             arc(-100:-130:5pt) ++(-145:2pt) arc(-130:-160:3pt) arc(-160:-100:3pt);
+
+\draw (a) ++(40:3pt) arc(30:100:4pt) arc(100:65:4pt) ++(40:2pt) arc(30:100:2pt);
 \end{tikzpicture}
 \end{document}

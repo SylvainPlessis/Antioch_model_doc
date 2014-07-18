@@ -1,7 +1,7 @@
 \documentclass{article}
 \usepackage{geometry,tikz}
 \usetikzlibrary{shapes.geometric}
-\geometry{paperheight=12cm,paperwidth=8cm,left=5pt,right=0pt,top=2pt,bottom=0pt}
+\geometry{paperheight=10cm,paperwidth=9cm,left=5pt,right=0pt,top=2pt,bottom=0pt}
 \pagestyle{empty}
 \begin{document}
 \centering
@@ -37,5 +37,13 @@
   \draw[xscale=-1] (-2.5,-6.5) .. controls ++(0.5,0) and ++(0.5,-0.25)  .. ++(0,1) 
                    (-2.5,-5.5) -- ++(0,-0.5) arc(-90:-70:1);
 \draw[rounded corners=2pt] (2.5,-5.5) -- (2.5,-5.3) \foreach \p in {1,...,12}{ -- ++(0.4*rnd,0.2*rnd)};
+
+%user
+\draw[thick] (5.5,1) circle(1cm);
+\draw[thick] (6,-1.5) -- ++(160:1)
+             ++(0,-0.3)
+             circle(5pt and 2pt) -- ++(0,0.6) -- +(30:0.5) --++(150:0.5) --++(-30:0.5);
+\path[clip] (5.5,1) circle(1cm);
+\fill (5.5,1) ++(150:1) -- ++(-15:0.8) -- ++(0:0.7) -- ++(-90:5pt) -- ++(175:0.7) arc(-30:-170:7pt) arc(-30:-170:7pt);
 \end{tikzpicture}
 \end{document}
